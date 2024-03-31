@@ -1,0 +1,65 @@
+﻿@model AdvertisementUserCreateModel 
+@{ 
+    Layout = "_Layout";
+}
+<form asp-action="Send" asp-controller="Advertisement" method="post" enctype="multipart/form-data"> @*enctype dosya işlemi varsa multipart seçilir.*@
+    <input type="hidden" asp-for="@Model.AdvertisementId" />
+    <input type="hidden" asp-for="@Model.AppUserId" />
+    <div class="container mx-5 my-5 w-25 p-5">
+
+        @if (ViewBag.GenderId == (int)GenderType.Erkek)
+        {
+            <div class="mb-3">
+                <label>Askerlik Durumu :</label>
+                <select onchange="setInputVisibility()" asp-for="@Model.MilitaryStatusId" class="form-select" asp-items="@ViewBag.MilitaryStatus">
+                </select>
+            </div>
+            <div id="dateDiv" class="mb-3" style="display:none">
+                <label>Tecil Tarihi:</label>
+                <input type="date" asp-for="@Model.EndDate" class="form-control" value="" />
+
+            </div>
+        }
+        else
+        {
+            <input type="hidden" asp-for="@Model.MilitaryStatusId" value="@((int)MilitaryStatusType.Muaf)" />
+        }
+
+        <div class="mb-3">
+            <label>İş Deneyiminiz(yıl olarak) : </label>
+            <input type="number" asp-for="@Model.WorkExperience" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label>CV : </label>
+            <input type="file" asp-for="@Model.CvFile" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        </div>
+        <div asp-validation-summary="All" class="text-danger">
+
+        </div>
+
+    </div>
+
+</form>
+
+@section script
+{ 
+    <script>
+        setInputVisibility();
+        function setInputVisibility()
+        {
+            var selectElement = document.getElementById("MilitaryStatusId");
+            var militaryStatusId = selectElement.value;
+            var dateDivElement = document.getElementById("dateDiv");
+
+            if (militaryStatusId == 2) {
+                dateDivElement.style.display = "block";
+            }
+            else {
+                dateDivElement.style.display = "none";
+            }
+        }
+    </script>
+}
